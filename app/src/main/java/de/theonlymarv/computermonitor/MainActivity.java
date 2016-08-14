@@ -2,13 +2,14 @@ package de.theonlymarv.computermonitor;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.SeekBar;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -21,24 +22,38 @@ import de.theonlymarv.computermonitor.RemoteClasses.Action;
 import de.theonlymarv.computermonitor.RemoteClasses.Remote;
 import de.theonlymarv.computermonitor.RemoteClasses.RemoteResponse;
 
-public class MainActivity extends AppCompatActivity implements WebSocketEvents {
+public class MainActivity extends AppCompatActivity implements WebSocketEvents, View.OnClickListener {
     WebSocket webSocket;
     SeekBar seekBar;
     FloatingActionButton fabQr;
+    private FloatingActionButton fab, fab1, fab2;
+    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+    private Boolean isFabOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fabQr = (FloatingActionButton)findViewById(R.id.fabQr);
-        assert fabQr != null;
-        fabQr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onCameraClick();
-            }
-        });
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
+        fab.setOnClickListener(this);
+        fab1.setOnClickListener(this);
+        fab2.setOnClickListener(this);
+
+//        fabQr = (FloatingActionButton)findViewById(R.id.fabQr);
+//        assert fabQr != null;
+//        fabQr.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onCameraClick();
+//            }
+//        });
 
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         assert seekBar != null;
@@ -165,5 +180,49 @@ public class MainActivity extends AppCompatActivity implements WebSocketEvents {
             }
         });
         Log.i("OnFabClick", "onClick: camera now");
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.fab:
+
+                animateFAB();
+                break;
+            case R.id.fab1:
+
+                Log.d("Raj", "Fab 1");
+                break;
+            case R.id.fab2:
+
+                Log.d("Raj", "Fab 2");
+                break;
+        }
+    }
+
+    public void animateFAB() {
+
+        if (isFabOpen) {
+
+            fab.startAnimation(rotate_backward);
+            fab1.startAnimation(fab_close);
+            fab2.startAnimation(fab_close);
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+            isFabOpen = false;
+            Log.d("Raj", "close");
+
+        } else {
+
+            fab.startAnimation(rotate_forward);
+            fab1.startAnimation(fab_open);
+            fab2.startAnimation(fab_open);
+            fab1.setClickable(true);
+            fab2.setClickable(true);
+            isFabOpen = true;
+            Log.d("Raj", "open");
+
+        }
     }
 }
