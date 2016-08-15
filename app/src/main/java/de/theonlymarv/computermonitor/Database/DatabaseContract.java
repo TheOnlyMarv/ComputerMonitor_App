@@ -17,7 +17,7 @@ public class DatabaseContract {
                 "CREATE TABLE " + TABLE_NAME + " (\n" +
                         "\t" + _ID + "\tINTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                         "\t" + COL_NAME + "\tTEXT NOT NULL UNIQUE,\n" +
-                        "\t" + COL_URL + "\tTEXT NOT NULL UNIQUE\n" +
+                        "\t" + COL_URL + "\tTEXT NOT NULL\n" +
                         ")";
     }
 }

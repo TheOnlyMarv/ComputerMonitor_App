@@ -3,6 +3,7 @@ package de.theonlymarv.computermonitor.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
@@ -43,9 +44,21 @@ public class ConnectionRepo {
         SQLiteDatabase db = databaseSource.open();
         ContentValues values = getContentValues(connection);
 
-        long connectionId = db.insert(DatabaseContract.LastConnectionEntry.TABLE_NAME, null, values);
+        long connectionId = -1;
+        try {
+            connectionId = db.insertOrThrow(DatabaseContract.LastConnectionEntry.TABLE_NAME, null, values);
+        } catch (SQLiteConstraintException sce) {
+            updateConnection(connection);
+        }
         databaseSource.close();
         return (int)connectionId;
+    }
+
+    private void updateConnection(Connection connection) {
+        SQLiteDatabase db = databaseSource.open();
+        ContentValues values = getContentValues(connection);
+        String where = DatabaseContract.LastConnectionEntry.COL_NAME + "='" + connection.getName() + "'";
+        db.update(DatabaseContract.LastConnectionEntry.TABLE_NAME, values, where, null);
     }
 
     public void deleteConnection(Connection connection){
