@@ -1,5 +1,6 @@
 package de.theonlymarv.computermonitor;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,8 +26,8 @@ import de.theonlymarv.computermonitor.RemoteClasses.Remote;
 import de.theonlymarv.computermonitor.RemoteClasses.RemoteResponse;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    WebSocket webSocket;
-    SeekBar seekBar;
+    private WebSocket webSocket;
+    private SeekBar seekBar;
     private FloatingActionButton fab, fab1, fab2;
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
     private Boolean isFabOpen = false;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         assert seekBar != null;
+        seekBar.setEnabled(false);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -131,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             webSocket.closeConnection();
         }
 
+        final ProgressDialog progressDialog = ProgressDialog.show(this, "Please wait ...", "Try to connect ...", true, true);
+
         webSocket = new WebSocket(this, new WebSocketEvents() {
             @Override
             public void onMessage(Remote remote) {
@@ -147,11 +151,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onOpened() {
                 fab1.setImageResource(R.drawable.disconnect);
                 animateFAB();
+                progressDialog.cancel();
+                progressDialog.dismiss();
+                seekBar.setEnabled(true);
             }
 
             @Override
             public void onClosed() {
                 fab1.setImageResource(R.drawable.camera);
+                seekBar.setEnabled(false);
+            }
+
+            @Override
+            public void onError(String error) {
+                View view = findViewById(R.id.rootLayout);
+                assert view != null;
+                Snackbar.make(view, error, Snackbar.LENGTH_LONG).show();
+                progressDialog.cancel();
+                progressDialog.dismiss();
             }
         }, url);
     }
@@ -213,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fab1.setClickable(false);
             fab2.setClickable(false);
             isFabOpen = false;
-            Log.d("Raj", "close");
 
         } else {
 
@@ -223,7 +239,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             fab1.setClickable(true);
             fab2.setClickable(true);
             isFabOpen = true;
-            Log.d("Raj", "open");
 
         }
     }

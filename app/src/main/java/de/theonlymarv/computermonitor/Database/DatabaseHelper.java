@@ -30,6 +30,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        Log.d(TAG, "Upgrading Datebase");
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.LastConnectionEntry.TABLE_NAME);
+        onCreate(db);
     }
 }

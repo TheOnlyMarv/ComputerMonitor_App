@@ -9,4 +9,5 @@ public interface WebSocketEvents {
     void onMessage(Remote remote);
     void onOpened();
     void onClosed();
+    void onError(String error);
 }

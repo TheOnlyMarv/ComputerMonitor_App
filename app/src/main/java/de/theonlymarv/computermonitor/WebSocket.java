@@ -85,8 +85,19 @@ public class WebSocket {
             }
 
             @Override
-            public void onError(Exception e) {
+            public void onError(final Exception e) {
                 Log.i("Websocket", "Error " + e.getMessage());
+
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String message = e.getMessage();
+                        if (e instanceof java.net.ConnectException){
+                            message = "Connection failed: Time out";
+                        }
+                        webSocketEvents.onError(message);
+                    }
+                });
             }
         };
         mWebSocketClient.connect();
