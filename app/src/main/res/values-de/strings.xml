@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ComputerMonitor</string>
+    <string name="dialog_please_wait">Bitte warten ...</string>
+    <string name="dialog_try_to_connect">Verbindung wird hergestellt ...</string>
+    <string name="chooser_empty">Keine Verbindungen im Verlauf</string>
+    <string name="text_volume_control">Lautstärke</string>
+    <string name="scanner_qr">QR-Code einlesen</string>
+</resources>

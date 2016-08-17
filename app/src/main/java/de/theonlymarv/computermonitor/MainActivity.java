@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                //Log.i("SeekBar", "onProgressChanged: " + progress);
                 if (fromUser){
                     if (webSocket != null){
                         progress = (int)(Math.round(progress / 5d) * 5);
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void onCameraClick(){
         IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt("Scan QR-Code");
+        integrator.setPrompt(getResources().getString(R.string.scanner_qr));
         integrator.setCameraId(0);
         integrator.setBeepEnabled(false);
         integrator.setOrientationLocked(true);
@@ -133,7 +132,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             webSocket.closeConnection();
         }
 
-        final ProgressDialog progressDialog = ProgressDialog.show(this, "Please wait ...", "Try to connect ...", true, true);
+        String title = getResources().getString(R.string.dialog_please_wait);
+        String message = getResources().getString(R.string.dialog_try_to_connect);
+        final ProgressDialog progressDialog = ProgressDialog.show(this, title, message, true, true);
 
         webSocket = new WebSocket(this, new WebSocketEvents() {
             @Override
@@ -215,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void OnEmptyChooseList() {
                 View view = findViewById(R.id.rootLayout);
                 assert view != null;
-                Snackbar.make(view, "No connections in history!", Snackbar.LENGTH_LONG);
+                Snackbar.make(view, R.string.chooser_empty, Snackbar.LENGTH_LONG);
             }
         }).ShowDialog();
     }
