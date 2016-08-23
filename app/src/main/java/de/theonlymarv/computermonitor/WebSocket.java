@@ -15,9 +15,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import de.theonlymarv.computermonitor.Interfaces.WebSocketEvents;
-import de.theonlymarv.computermonitor.RemoteClasses.Action;
-import de.theonlymarv.computermonitor.RemoteClasses.RemoteAction;
-import de.theonlymarv.computermonitor.RemoteClasses.RemoteResponse;
+import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.Action;
+import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.RemoteAction;
+import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.RemoteResponse;
 
 /**
  * Created by Marvin on 14.08.2016.

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -21,9 +20,9 @@ import de.theonlymarv.computermonitor.Dialogs.ChooseConnectionDialog;
 import de.theonlymarv.computermonitor.Interfaces.ChooseDialogEvents;
 import de.theonlymarv.computermonitor.Interfaces.WebSocketEvents;
 import de.theonlymarv.computermonitor.Models.Connection;
-import de.theonlymarv.computermonitor.RemoteClasses.Action;
-import de.theonlymarv.computermonitor.RemoteClasses.Remote;
-import de.theonlymarv.computermonitor.RemoteClasses.RemoteResponse;
+import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.Action;
+import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.Remote;
+import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.RemoteResponse;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private WebSocket webSocket;
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String title = getResources().getString(R.string.dialog_please_wait);
         String message = getResources().getString(R.string.dialog_try_to_connect);
-        final ProgressDialog progressDialog = ProgressDialog.show(this, title, message, true, true);
+        final ProgressDialog progressDialog = ProgressDialog.show(this, title, message, true, false);
 
         webSocket = new WebSocket(this, new WebSocketEvents() {
             @Override
@@ -216,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void OnEmptyChooseList() {
                 View view = findViewById(R.id.rootLayout);
                 assert view != null;
-                Snackbar.make(view, R.string.chooser_empty, Snackbar.LENGTH_LONG);
+                Snackbar.make(view, R.string.chooser_empty, Snackbar.LENGTH_LONG).show();
             }
         }).ShowDialog();
     }
