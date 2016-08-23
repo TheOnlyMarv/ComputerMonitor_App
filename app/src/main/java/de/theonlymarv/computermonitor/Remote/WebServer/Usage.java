@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor.RemoteClasses.WebServer;
+package de.theonlymarv.computermonitor.Remote.WebServer;
 
 import java.util.Date;
 

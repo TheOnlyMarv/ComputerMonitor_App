@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor.RemoteClasses.WebServer;
+package de.theonlymarv.computermonitor.Remote.WebServer;
 
 import android.annotation.SuppressLint;
 import android.support.annotation.NonNull;
@@ -9,8 +9,24 @@ import java.util.Date;
 /**
  * Created by Marvin on 23.08.2016.
  */
-public class Requsts {
+public class Request {
     private static String baseUrl = "https://theonlymarv.de/cm/";
+
+    private Action action;
+    private String requestUrl;
+
+    public Request(Action action, @NonNull String requestUrl) {
+        this.action = action;
+        this.requestUrl = requestUrl;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public String getRequestUrl() {
+        return requestUrl;
+    }
 
     public static String getLoginUrl(String username, String password){
         return baseUrl + String.format("login.php?username=%s&password=%s", username, password);
@@ -30,10 +46,19 @@ public class Requsts {
 
     @SuppressLint("SimpleDateFormat")
     public static String getAddUsageUrl(String token, int deviceId, float download, float upload, @NonNull Date date){
-        return baseUrl + String.format("usagedataadd.php?token=%s&deviceid=%s&download=%s&upload=%s&date=%s", token, String.valueOf(deviceId), String.valueOf(download), String.valueOf(upload), new SimpleDateFormat("yyyy-MM-dd").format(date));
+        return baseUrl + String.format("usagedataadd.php?token=%s&deviceid=%s&download=%s&upload=%s&date=%s", token, String.valueOf(deviceId), String.valueOf(download), String.valueOf(upload), new SimpleDateFormat("yyyy-MM-dd").format(date)).replace(",", ".");
     }
 
     public static String getLoadUsageUrl(String token, int deviceId){
         return baseUrl + String.format("usagedatalist.php?token=%s&deviceid=%s", token, String.valueOf(deviceId));
+    }
+
+    public enum Action {
+        LOGIN,
+        REGISTER,
+        LOAD_DEVICE,
+        ADD_DEVICE,
+        ADD_USAGE,
+        LOAD_USAGE
     }
 }

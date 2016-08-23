@@ -1,6 +1,6 @@
 package de.theonlymarv.computermonitor.Interfaces;
 
-import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.Remote;
+import de.theonlymarv.computermonitor.Remote.WebSocket.Remote;
 
 /**
  * Created by Marvin on 14.08.2016.

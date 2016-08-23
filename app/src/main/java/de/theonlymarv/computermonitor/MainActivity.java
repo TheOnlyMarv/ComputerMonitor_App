@@ -20,9 +20,9 @@ import de.theonlymarv.computermonitor.Dialogs.ChooseConnectionDialog;
 import de.theonlymarv.computermonitor.Interfaces.ChooseDialogEvents;
 import de.theonlymarv.computermonitor.Interfaces.WebSocketEvents;
 import de.theonlymarv.computermonitor.Models.Connection;
-import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.Action;
-import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.Remote;
-import de.theonlymarv.computermonitor.RemoteClasses.WebSocket.RemoteResponse;
+import de.theonlymarv.computermonitor.Remote.WebSocket.Action;
+import de.theonlymarv.computermonitor.Remote.WebSocket.Remote;
+import de.theonlymarv.computermonitor.Remote.WebSocket.RemoteResponse;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private WebSocket webSocket;

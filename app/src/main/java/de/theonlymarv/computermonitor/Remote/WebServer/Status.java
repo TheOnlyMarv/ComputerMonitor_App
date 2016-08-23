@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor.RemoteClasses.WebServer;
+package de.theonlymarv.computermonitor.Remote.WebServer;
 
 /**
  * Created by Marvin on 23.08.2016.
