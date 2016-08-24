@@ -12,6 +12,7 @@ import com.owlike.genson.JsonBindingException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import de.theonlymarv.computermonitor.Interfaces.OnNetworkAccess;
@@ -39,7 +40,7 @@ public class ServerConnection extends AsyncTask<Request, Void, Object> {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             InputStream is = connection.getInputStream();
-            Genson genson = new GensonBuilder().failOnMissingProperty(true).create();
+            Genson genson = new GensonBuilder().useDateFormat(new SimpleDateFormat("yyyy-MM-dd")).failOnMissingProperty(true).create();
 
             switch (request.getAction()) {
                 case LOAD_DEVICE:

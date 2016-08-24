@@ -6,4 +6,14 @@
     <string name="chooser_empty">Keine Verbindungen im Verlauf</string>
     <string name="text_volume_control">Lautstärke</string>
     <string name="scanner_qr">QR-Code einlesen</string>
+    <string name="login_username">Benutzername</string>
+    <string name="login_password">Passwort</string>
+    <string name="login_login">Anmelden</string>
+    <string name="login_register">Registrieren</string>
+    <string name="login_save_password">Passwort speichern</string>
+    <string name="unkown_error">Unbekannter Fehler</string>
+    <string name="login_wrong">Benutzername / Passwort falsch</string>
+    <string name="unkown_network_error">Unbekannter Netzwerkfehler</string>
+    <string name="login_register_failed">Benutzname bereits vergeben</string>
+    <string name="activitiy_login">Anmelden</string>
 </resources>

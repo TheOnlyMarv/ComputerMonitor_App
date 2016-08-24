@@ -5,4 +5,14 @@
     <string name="chooser_empty">No connections in history</string>
     <string name="text_volume_control">Volume</string>
     <string name="scanner_qr">Scan QR-Code</string>
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_login">Login</string>
+    <string name="login_register">Register</string>
+    <string name="login_save_password">Store password</string>
+    <string name="unkown_error">Unkown error</string>
+    <string name="login_wrong">Wrong username / password</string>
+    <string name="unkown_network_error">Unkown network error</string>
+    <string name="login_register_failed">User already exist</string>
+    <string name="activitiy_login">Login</string>
 </resources>
