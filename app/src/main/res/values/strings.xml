@@ -15,4 +15,9 @@
     <string name="unkown_network_error">Unkown network error</string>
     <string name="login_register_failed">User already exist</string>
     <string name="activitiy_login">Login</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="card_last_used">Last used:</string>
+    <string name="access_denied">Session timed out</string>
 </resources>

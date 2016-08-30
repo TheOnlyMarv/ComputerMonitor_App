@@ -9,6 +9,8 @@ import com.owlike.genson.Genson;
 import com.owlike.genson.GensonBuilder;
 import com.owlike.genson.JsonBindingException;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -40,29 +42,32 @@ public class ServerConnection extends AsyncTask<Request, Void, Object> {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             InputStream is = connection.getInputStream();
+            String json = IOUtils.toString(is, "UTF-8");
             Genson genson = new GensonBuilder().useDateFormat(new SimpleDateFormat("yyyy-MM-dd")).failOnMissingProperty(true).create();
 
             switch (request.getAction()) {
                 case LOAD_DEVICE:
                     try {
-                        return genson.deserialize(is, new GenericType<List<Device>>() {
+                        return genson.deserialize(json, new GenericType<List<Device>>() {
                         });
                     } catch (JsonBindingException jbe) {
                         Log.i(TAG, "JsonBindingException: not a List of Device");
+                        return getStatus(json, genson);
                     }
                 case LOAD_USAGE:
                     try {
-                        return genson.deserialize(is, new GenericType<List<Usage>>() {
+                        return genson.deserialize(json, new GenericType<List<Usage>>() {
                         });
                     } catch (JsonBindingException jbe) {
-                        Log.i(TAG, "JsonBindingException: not a List of Device");
+                        Log.i(TAG, "JsonBindingException: not a List of Usage");
+                        return getStatus(json, genson);
                     }
                 case LOGIN:
                 case REGISTER:
                 case ADD_DEVICE:
                 case ADD_USAGE:
                     try {
-                        return genson.deserialize(is, de.theonlymarv.computermonitor.Remote.WebServer.Status.class);
+                        return getStatus(json, genson);
                     } catch (JsonBindingException jbe) {
                         Log.e(TAG, "JsonBindingException: not a object of Status", jbe);
                     }
@@ -72,6 +77,10 @@ public class ServerConnection extends AsyncTask<Request, Void, Object> {
         }
 
         return null;
+    }
+
+    private de.theonlymarv.computermonitor.Remote.WebServer.Status getStatus(String json, Genson genson) throws JsonBindingException {
+        return genson.deserialize(json, de.theonlymarv.computermonitor.Remote.WebServer.Status.class);
     }
 
     @Override

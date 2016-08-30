@@ -16,4 +16,6 @@
     <string name="unkown_network_error">Unbekannter Netzwerkfehler</string>
     <string name="login_register_failed">Benutzname bereits vergeben</string>
     <string name="activitiy_login">Anmelden</string>
+    <string name="card_last_used">Zuletzt verwendet:</string>
+    <string name="access_denied">Sitzung abgelaufen</string>
 </resources>
