@@ -5,6 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
     android:layout_margin="6dp"
     card_view:cardElevation="@dimen/cardview_default_elevation"
     card_view:cardCornerRadius="@dimen/cardview_default_radius">
@@ -41,7 +43,7 @@
             android:id="@+id/horizontalBarChart"
             android:layout_width="match_parent"
             android:layout_height="100sp"
-            android:layout_below="@id/tvLastUsedDesc"></com.github.mikephil.charting.charts.HorizontalBarChart>
+            android:layout_below="@id/tvLastUsedDesc" />
 
     </RelativeLayout>
 

@@ -33,4 +33,13 @@ public class Device {
     public void setLast_used(Date last_used) {
         this.last_used = last_used;
     }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", last_used=" + last_used +
+                '}';
+    }
 }

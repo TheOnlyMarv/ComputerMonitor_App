@@ -21,7 +21,7 @@ public class NewMainActivity extends AppCompatActivity {
 
         frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout, new DevicesFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout, new DeviceListFragment()).commit();
     }
 
     @Override

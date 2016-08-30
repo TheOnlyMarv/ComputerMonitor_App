@@ -24,12 +24,14 @@ import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
  * Created by Marvin on 24.08.2016 for ComputerMonitor.
  */
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
-    List<Device> devices;
-    List<Usage> lastUsages;
+    private List<Device> devices;
+    private List<Usage> lastUsages;
+    private OnItemClickListener onItemClickListener;
 
-    public DeviceListAdapter(List<Device> devices, List<Usage> lastUsages) {
+    public DeviceListAdapter(List<Device> devices, List<Usage> lastUsages, OnItemClickListener onItemClickListener) {
         this.devices = devices;
         this.lastUsages = lastUsages;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -39,8 +41,14 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     }
 
     @Override
-    public void onBindViewHolder(DeviceViewHolder holder, int position) {
+    public void onBindViewHolder(final DeviceViewHolder holder, int position) {
         holder.assignData(devices.get(position), lastUsages.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onItemClick(devices.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
@@ -81,5 +89,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             horizontalBarChart.setDescription("");
             horizontalBarChart.setTouchEnabled(false);
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Device device);
     }
 }

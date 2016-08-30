@@ -31,8 +31,9 @@ import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DevicesFragment extends Fragment {
+public class DeviceListFragment extends Fragment implements DeviceListAdapter.OnItemClickListener {
 
+    private static final String TAG = DeviceListFragment.class.getSimpleName();
     private View view;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -140,7 +141,7 @@ public class DevicesFragment extends Fragment {
     private void downloadFinish(int i) {
         if (i == deviceList.size()) {
             showProgressbar(false);
-            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(deviceList, usageList);
+            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(deviceList, usageList, this);
             recyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
             recyclerView.setAdapter(deviceListAdapter);
         }
@@ -149,6 +150,11 @@ public class DevicesFragment extends Fragment {
     private void showProgressbar(boolean visible) {
         swipeRefreshLayout.setRefreshing(visible);
         progressBar.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @Override
+    public void onItemClick(Device device) {
+        Log.i(TAG, "onItemClick: " + device.toString());
     }
 
     private void showSnackBar(@StringRes int textRes, @Snackbar.Duration int duration) {
