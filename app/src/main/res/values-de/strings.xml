@@ -18,4 +18,10 @@
     <string name="activitiy_login">Anmelden</string>
     <string name="card_last_used">Zuletzt verwendet:</string>
     <string name="access_denied">Sitzung abgelaufen</string>
+    <string name="dialog_logout_title">Abmelden</string>
+    <string name="dialog_logout_message">Wollen Sie sich wirklich abmelden?</string>
+    <string name="dialog_logout_positiv">Abmelden</string>
+    <string name="dialog_cancel">Abbrechen</string>
+    <string name="dialog_session_timed_out_title">Sitzung abgelaufen</string>
+    <string name="dialog_session_timed_out_message">Sie werden automatisch abgemeldet</string>
 </resources>

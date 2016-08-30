@@ -1,6 +1,8 @@
 package de.theonlymarv.computermonitor;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -41,5 +43,16 @@ public class Utility {
             e.printStackTrace();
             return defaultValue;
         }
+    }
+
+    public static void resetSessionSettings(Context context) {
+        saveToPrefs(context, PREFS_TOKEN_KEY, "");
+    }
+
+    public static void logout(Activity context) {
+        Utility.resetSessionSettings(context);
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+        context.finish();
     }
 }

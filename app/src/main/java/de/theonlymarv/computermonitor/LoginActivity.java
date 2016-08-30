@@ -80,10 +80,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Snackbar.make(findViewById(R.id.rootLayout), text, duration).show();
     }
 
-    private void showSnackBar(String text, @Snackbar.Duration int duration) {
-        Snackbar.make(findViewById(R.id.rootLayout), text, duration).show();
-    }
-
     private void webRegister() {
         Request request = new Request(Request.Action.REGISTER, Request.getRegisterUrl(editUsername.getText().toString().trim(), editPassword.getText().toString()));
         ServerConnection serverConnection = new ServerConnection(new OnNetworkAccess() {
@@ -158,6 +154,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void successfulLoggedIn(String token) {
         Utility.saveToPrefs(this, Utility.PREFS_TOKEN_KEY, token);
         startActivity(new Intent(this, NewMainActivity.class));
+        finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+    }
 }
