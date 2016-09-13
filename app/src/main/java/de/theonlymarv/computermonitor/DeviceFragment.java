@@ -63,7 +63,17 @@ public class DeviceFragment extends Fragment {
             }
         });
 
-        startLoadingUsageData();
+        if (RuntimeHolder.getInstance().getUsagesList() != null) {
+            List<Usage> usageList = Utility.getUsageWithId(deviceId, RuntimeHolder.getInstance().getUsagesList());
+            if (usageList.size() != 0) {
+                assignUsageList(usageList);
+                setProgressBarVisibility(false);
+            } else {
+                startLoadingUsageData();
+            }
+        } else {
+            startLoadingUsageData();
+        }
 
         return this.view;
     }

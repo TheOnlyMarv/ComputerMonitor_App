@@ -39,9 +39,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
-
-    private List<Device> deviceList;
-    private List<Usage> usageList;
+    private RuntimeHolder runtimeHolder;
 
     private int finishingCounter;
 
@@ -54,7 +52,13 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 
-        downloadDevices(Utility.getFromPrefs(getContext(), Utility.PREFS_TOKEN_KEY, ""));
+        runtimeHolder = RuntimeHolder.getInstance();
+
+        if (runtimeHolder.getDeviceList() != null && runtimeHolder.getUsagesList() != null) {
+            downloadFinish(runtimeHolder.getDeviceList().size());
+        } else {
+            downloadDevices(Utility.getFromPrefs(getContext(), Utility.PREFS_TOKEN_KEY, ""));
+        }
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -70,8 +74,8 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
 
     private void downloadDevices(final String token) {
 
-        deviceList = new ArrayList<>();
-        usageList = new ArrayList<>();
+        runtimeHolder.setDeviceList(new ArrayList<Device>());
+        runtimeHolder.setUsagesList(new ArrayList<Usage>());
         finishingCounter = 0;
 
         Request request = new Request(Request.Action.LOAD_DEVICE, Request.getLoadDevicesUrl(token));
@@ -79,11 +83,11 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             @Override
             public void OnSuccessful(Object object) {
                 if (object instanceof List<?>) {
-                    deviceList.addAll((List<Device>) object);
-                    for (Device device : deviceList) {
+                    runtimeHolder.getDeviceList().addAll((List<Device>) object);
+                    for (Device device : runtimeHolder.getDeviceList()) {
                         downloadUsage(token, device);
                     }
-                    if (deviceList.size() == 0) {
+                    if (runtimeHolder.getDeviceList().size() == 0) {
                         showProgressbar(false);
                     }
                 } else if (object instanceof Status) {
@@ -124,9 +128,9 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
                 if (object instanceof List<?>) {
                     List<Usage> usages = (List<Usage>) object;
                     if (usages.size() > 0) {
-                        usageList.add(usages.get(usages.size() - 1));
+                        runtimeHolder.getUsagesList().addAll(usages);
                     } else {
-                        usageList.add(null);
+                        runtimeHolder.getUsagesList().add(null);
                     }
                     downloadFinish(++finishingCounter);
                 }
@@ -142,9 +146,14 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     }
 
     private void downloadFinish(int i) {
-        if (i == deviceList.size()) {
+        if (i == runtimeHolder.getDeviceList().size()) {
             showProgressbar(false);
-            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(deviceList, usageList, this);
+            List<Usage> usageList = new ArrayList<>();
+            for (Device device : runtimeHolder.getDeviceList()) {
+                List<Usage> usages = Utility.getUsageWithId(device.getId(), runtimeHolder.getUsagesList());
+                usageList.add(usages.get(usages.size() - 1));
+            }
+            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(runtimeHolder.getDeviceList(), usageList, this);
             recyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
             recyclerView.setAdapter(deviceListAdapter);
         }

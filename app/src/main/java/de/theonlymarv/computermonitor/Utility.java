@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
 
 /**
  * Created by Marvin on 24.08.2016.
@@ -54,5 +60,16 @@ public class Utility {
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
         context.finish();
+    }
+
+    @NonNull
+    public static List<Usage> getUsageWithId(int id, @NonNull List<Usage> usageList) {
+        List<Usage> filteredList = new ArrayList<>();
+        for (Usage usage : usageList) {
+            if (usage.getDevice_id() == id) {
+                filteredList.add(usage);
+            }
+        }
+        return filteredList;
     }
 }

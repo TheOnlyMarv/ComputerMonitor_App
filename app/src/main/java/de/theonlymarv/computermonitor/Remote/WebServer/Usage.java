@@ -6,8 +6,17 @@ import java.util.Date;
  * Created by Marvin on 23.08.2016.
  */
 public class Usage {
+    private int device_id;
     private float upload, download;
     private Date date;
+
+    public int getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(int device_id) {
+        this.device_id = device_id;
+    }
 
     public float getUpload() {
         return upload;
