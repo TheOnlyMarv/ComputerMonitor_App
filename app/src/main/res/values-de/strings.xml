@@ -24,4 +24,5 @@
     <string name="dialog_cancel">Abbrechen</string>
     <string name="dialog_session_timed_out_title">Sitzung abgelaufen</string>
     <string name="dialog_session_timed_out_message">Sie werden automatisch abgemeldet</string>
+    <string name="empty_device_data">Momentan existieren für dieses Gerät keine Daten</string>
 </resources>

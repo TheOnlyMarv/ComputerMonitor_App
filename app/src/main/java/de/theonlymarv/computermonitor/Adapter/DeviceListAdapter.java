@@ -57,7 +57,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
     }
 
     protected class DeviceViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDeviceName, tvLastUsage;
+        TextView tvDeviceName, tvLastUsage, tvEmpty;
         HorizontalBarChart horizontalBarChart;
 
         public DeviceViewHolder(View itemView) {
@@ -65,11 +65,21 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             tvDeviceName = (TextView) itemView.findViewById(R.id.tvDeviceName);
             tvLastUsage = (TextView) itemView.findViewById(R.id.tvLastUsed);
             horizontalBarChart = (HorizontalBarChart) itemView.findViewById(R.id.horizontalBarChart);
+            tvEmpty = (TextView) itemView.findViewById(R.id.tvEmpty);
         }
 
         public void assignData(Device device, Usage usage) {
             tvDeviceName.setText(device.getName());
-            tvLastUsage.setText(new SimpleDateFormat("dd.MM.yyyy").format(device.getLast_used()));
+            tvLastUsage.setText(device.getLast_used() == null ? " - " : new SimpleDateFormat("dd.MM.yyyy").format(device.getLast_used()));
+
+            if (usage == null) {
+                tvEmpty.setVisibility(View.VISIBLE);
+                horizontalBarChart.setVisibility(View.INVISIBLE);
+                return;
+            } else {
+                tvEmpty.setVisibility(View.GONE);
+                horizontalBarChart.setVisibility(View.VISIBLE);
+            }
 
             ArrayList<BarEntry> entries = new ArrayList<>();
             entries.add(new BarEntry(usage.getDownload() / 1024, 0));

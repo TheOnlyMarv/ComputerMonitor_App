@@ -3,6 +3,7 @@ package de.theonlymarv.computermonitor;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -47,7 +48,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_devices, container, false);
+        view = inflater.inflate(R.layout.fragment_device_list, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -61,6 +62,8 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
                 downloadDevices(Utility.getFromPrefs(getContext(), Utility.PREFS_TOKEN_KEY, ""));
             }
         });
+
+        getActivity().setTitle(R.string.app_name);
 
         return view;
     }
@@ -117,7 +120,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         Request request = new Request(Request.Action.LOAD_USAGE, Request.getLoadUsageUrl(token, device.getId()));
         ServerConnection serverConnection = new ServerConnection(new OnNetworkAccess() {
             @Override
-            public void OnSuccessful(Object object) {
+            public void OnSuccessful(@NonNull Object object) {
                 if (object instanceof List<?>) {
                     List<Usage> usages = (List<Usage>) object;
                     if (usages.size() > 0) {
@@ -155,6 +158,12 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     @Override
     public void onItemClick(Device device) {
         Log.i(TAG, "onItemClick: " + device.toString());
+        DeviceFragment deviceFragment = new DeviceFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(DeviceFragment.DEVICE_ID_KEY, device.getId());
+        bundle.putString(DeviceFragment.DEVICE_NAME_KEY, device.getName());
+        deviceFragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout, deviceFragment).addToBackStack("DevFrag").commit();
     }
 
     private void showSnackBar(@StringRes int textRes, @Snackbar.Duration int duration) {
