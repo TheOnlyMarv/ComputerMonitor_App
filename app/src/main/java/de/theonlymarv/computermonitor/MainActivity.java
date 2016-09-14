@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fab1.setOnClickListener(this);
         fab2.setOnClickListener(this);
 
+
         seekBar = (SeekBar)findViewById(R.id.seekBar);
         assert seekBar != null;
         seekBar.setEnabled(false);

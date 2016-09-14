@@ -172,7 +172,8 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         bundle.putInt(DeviceFragment.DEVICE_ID_KEY, device.getId());
         bundle.putString(DeviceFragment.DEVICE_NAME_KEY, device.getName());
         deviceFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout, deviceFragment).addToBackStack("DevFrag").commit();
+        getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.mainFrameLayout, deviceFragment).addToBackStack("DevFrag").commit();
     }
 
     private void showSnackBar(@StringRes int textRes, @Snackbar.Duration int duration) {
