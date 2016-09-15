@@ -138,9 +138,9 @@ public class DeviceFragment extends Fragment {
         int startIndex = usageList.size() - anzEntries;
 
 
-        ArrayList<BarEntry> downloadValues = new ArrayList<BarEntry>();
-        ArrayList<BarEntry> uploadValues = new ArrayList<BarEntry>();
-        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<BarEntry> downloadValues = new ArrayList<>();
+        ArrayList<BarEntry> uploadValues = new ArrayList<>();
+        ArrayList<String> labels = new ArrayList<>();
 
         for (int i = startIndex; i < usageList.size(); i++) {
             Usage usage = usageList.get(i);
@@ -155,7 +155,7 @@ public class DeviceFragment extends Fragment {
         set1.setColor(Color.rgb(104, 241, 175));
         set2.setColor(Color.rgb(164, 228, 251));
 
-        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+        ArrayList<BarDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
         dataSets.add(set2);
 
