@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_overview_fragment"
+            android:icon="@drawable/home_black"
+            android:title="@string/menu_overview"
+            android:checked="true" />
+        <item
+            android:id="@+id/nav_remote_fragment"
+            android:icon="@drawable/desktop_black"
+            android:title="@string/menu_remote" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/power_black"
+            android:title="@string/menu_logout"
+            android:checkable="false" />
+    </group>
+</menu>

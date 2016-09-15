@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ComputerMonitor</string>
+    <string name="app_name">Computer Monitor</string>
     <string name="dialog_please_wait">Bitte warten ...</string>
     <string name="dialog_try_to_connect">Verbindung wird hergestellt ...</string>
     <string name="chooser_empty">Keine Verbindungen im Verlauf</string>
@@ -25,4 +25,7 @@
     <string name="dialog_session_timed_out_title">Sitzung abgelaufen</string>
     <string name="dialog_session_timed_out_message">Sie werden automatisch abgemeldet</string>
     <string name="empty_device_data">Momentan existieren für dieses Gerät keine Daten</string>
+    <string name="menu_overview">Übersicht</string>
+    <string name="menu_remote">Remote Verbindung</string>
+    <string name="menu_logout">Abmelden</string>
 </resources>

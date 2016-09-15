@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ComputerMonitor</string>
+    <string name="app_name">Computer Monitor</string>
     <string name="dialog_please_wait">Please wait ...</string>
     <string name="dialog_try_to_connect">Try to connect ...</string>
     <string name="chooser_empty">No connections in history</string>
@@ -28,4 +28,9 @@
     <string name="dialog_session_timed_out_message">You will loged out automatically</string>
     <string name="dialog_ok" translatable="false">OK</string>
     <string name="empty_device_data">No data existing yet for this device</string>
+    <string name="menu_overview">Overview</string>
+    <string name="menu_remote">Remote connection</string>
+    <string name="menu_logout">Logout</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
