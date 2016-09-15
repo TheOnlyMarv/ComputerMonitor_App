@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor;
+package de.theonlymarv.computermonitor.Activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
+
+import de.theonlymarv.computermonitor.Fragment.DeviceListFragment;
+import de.theonlymarv.computermonitor.R;
+import de.theonlymarv.computermonitor.Utility;
 
 /**
  * Created by Marvin on 24.08.2016 for ComputerMonitor.

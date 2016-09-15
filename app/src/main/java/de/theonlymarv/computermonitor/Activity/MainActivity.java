@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor;
+package de.theonlymarv.computermonitor.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -20,9 +20,11 @@ import de.theonlymarv.computermonitor.Dialogs.ChooseConnectionDialog;
 import de.theonlymarv.computermonitor.Interfaces.ChooseDialogEvents;
 import de.theonlymarv.computermonitor.Interfaces.WebSocketEvents;
 import de.theonlymarv.computermonitor.Models.Connection;
+import de.theonlymarv.computermonitor.R;
 import de.theonlymarv.computermonitor.Remote.WebSocket.Action;
 import de.theonlymarv.computermonitor.Remote.WebSocket.Remote;
 import de.theonlymarv.computermonitor.Remote.WebSocket.RemoteResponse;
+import de.theonlymarv.computermonitor.WebSocket;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private WebSocket webSocket;

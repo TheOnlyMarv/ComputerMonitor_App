@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor;
+package de.theonlymarv.computermonitor.Fragment;
 
 
 import android.content.DialogInterface;
@@ -22,11 +22,14 @@ import java.util.List;
 
 import de.theonlymarv.computermonitor.Adapter.DeviceListAdapter;
 import de.theonlymarv.computermonitor.Interfaces.OnNetworkAccess;
+import de.theonlymarv.computermonitor.R;
 import de.theonlymarv.computermonitor.Remote.WebServer.Device;
 import de.theonlymarv.computermonitor.Remote.WebServer.Request;
 import de.theonlymarv.computermonitor.Remote.WebServer.ServerConnection;
 import de.theonlymarv.computermonitor.Remote.WebServer.Status;
 import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
+import de.theonlymarv.computermonitor.RuntimeHolder;
+import de.theonlymarv.computermonitor.Utility;
 
 
 /**

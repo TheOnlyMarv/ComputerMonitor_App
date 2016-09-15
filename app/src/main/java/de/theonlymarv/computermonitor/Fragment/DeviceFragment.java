@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor;
+package de.theonlymarv.computermonitor.Fragment;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
@@ -26,9 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.theonlymarv.computermonitor.Interfaces.OnNetworkAccess;
+import de.theonlymarv.computermonitor.R;
 import de.theonlymarv.computermonitor.Remote.WebServer.Request;
 import de.theonlymarv.computermonitor.Remote.WebServer.ServerConnection;
 import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
+import de.theonlymarv.computermonitor.RuntimeHolder;
+import de.theonlymarv.computermonitor.Utility;
 
 /**
  * Created by Marvin on 30.08.2016 for ComputerMonitor.

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.theonlymarv.computermonitor.Activity.LoginActivity;
 import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
 
 /**

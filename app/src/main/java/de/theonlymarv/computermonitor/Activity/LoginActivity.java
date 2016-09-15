@@ -1,4 +1,4 @@
-package de.theonlymarv.computermonitor;
+package de.theonlymarv.computermonitor.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +15,11 @@ import android.widget.ProgressBar;
 import java.io.IOException;
 
 import de.theonlymarv.computermonitor.Interfaces.OnNetworkAccess;
+import de.theonlymarv.computermonitor.R;
 import de.theonlymarv.computermonitor.Remote.WebServer.Request;
 import de.theonlymarv.computermonitor.Remote.WebServer.ServerConnection;
 import de.theonlymarv.computermonitor.Remote.WebServer.Status;
+import de.theonlymarv.computermonitor.Utility;
 
 /**
  * Created by Marvin on 24.08.2016 for ComputerMonitor.
