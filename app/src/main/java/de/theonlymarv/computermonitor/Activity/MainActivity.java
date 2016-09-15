@@ -1,248 +1,187 @@
 package de.theonlymarv.computermonitor.Activity;
 
-import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.SeekBar;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import de.theonlymarv.computermonitor.Database.ConnectionRepo;
-import de.theonlymarv.computermonitor.Dialogs.ChooseConnectionDialog;
-import de.theonlymarv.computermonitor.Interfaces.ChooseDialogEvents;
-import de.theonlymarv.computermonitor.Interfaces.WebSocketEvents;
-import de.theonlymarv.computermonitor.Models.Connection;
+import de.theonlymarv.computermonitor.Fragment.DeviceListFragment;
+import de.theonlymarv.computermonitor.Fragment.RemoteControlFragment;
+import de.theonlymarv.computermonitor.Interfaces.PreRemoteEvents;
 import de.theonlymarv.computermonitor.R;
-import de.theonlymarv.computermonitor.Remote.WebSocket.Action;
-import de.theonlymarv.computermonitor.Remote.WebSocket.Remote;
-import de.theonlymarv.computermonitor.Remote.WebSocket.RemoteResponse;
-import de.theonlymarv.computermonitor.WebSocket;
+import de.theonlymarv.computermonitor.Utility;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private WebSocket webSocket;
-    private SeekBar seekBar;
-    private FloatingActionButton fab, fab1, fab2;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
-    private Boolean isFabOpen = false;
+/**
+ * Created by Marvin on 24.08.2016 for ComputerMonitor.
+ */
+public class MainActivity extends AppCompatActivity {
+
+    private FrameLayout frameLayout;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private NavigationView nvDrawer;
+    private ActionBarDrawerToggle drawerToggle;
+
+    private Fragment activeFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab1 = (FloatingActionButton) findViewById(R.id.fabCamera);
-        fab2 = (FloatingActionButton) findViewById(R.id.fabList);
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
-        fab.setOnClickListener(this);
-        fab1.setOnClickListener(this);
-        fab2.setOnClickListener(this);
+        frameLayout = (FrameLayout) findViewById(R.id.mainFrameLayout);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
+        drawerToggle = setupDrawerToggle();
 
-
-        seekBar = (SeekBar)findViewById(R.id.seekBar);
-        assert seekBar != null;
-        seekBar.setEnabled(false);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser){
-                    if (webSocket != null){
-                        progress = (int)(Math.round(progress / 5d) * 5);
-                        sendSeekBarProgress(progress);
-                    }
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        drawer.addDrawerListener(drawerToggle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFrameLayout, new DeviceListFragment()).commit();
     }
 
-    private void onCameraClick(){
-        IntentIntegrator integrator = new IntentIntegrator(MainActivity.this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        integrator.setPrompt(getResources().getString(R.string.scanner_qr));
-        integrator.setCameraId(0);
-        integrator.setBeepEnabled(false);
-        integrator.setOrientationLocked(true);
-        integrator.initiateScan();
-    }
-
-    private void onCancelClick(){
-        if (webSocket != null)
-            webSocket.closeConnection();
-    }
-
-    private void sendSeekBarProgress(int progress){
-        if (webSocket != null && webSocket.isConnected())
-            webSocket.sendMessage(Action.Volumn, progress);
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        int keyCode = event.getKeyCode();
-        int progress = (int)(Math.round(seekBar.getProgress() / 5d) * 5);
-        switch (keyCode){
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                if (event.getAction() == KeyEvent.ACTION_DOWN){
-                    seekBar.setProgress(progress < 100 ? progress + 5 : progress);
-                    sendSeekBarProgress(seekBar.getProgress());
-                }
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    seekBar.setProgress(progress > 0 ? progress - 5 : progress);
-                    sendSeekBarProgress(seekBar.getProgress());
-                }
-                return true;
-            default:
-                return super.dispatchKeyEvent(event);
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
         }
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                drawer.openDrawer(GravityCompat.START);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null){
-            if (result.getContents() != null){
-                openWebSocketConnection(result.getContents());
+        if (result != null) {
+            if (result.getContents() != null && activeFragment instanceof PreRemoteEvents) {
+                ((PreRemoteEvents) activeFragment).OnQrCodeScanned(result.getContents());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void openWebSocketConnection(String url) {
-        if (webSocket != null && webSocket.isConnected()) {
-            webSocket.closeConnection();
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        boolean successful = false;
+        if (activeFragment instanceof PreRemoteEvents) {
+            successful = ((PreRemoteEvents) activeFragment).OnDownUpPressed(event);
+        }
+        return successful || super.dispatchKeyEvent(event);
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        // Create a new fragment and specify the fragment to show based on nav item clicked
+        activeFragment = null;
+        Class fragmentClass;
+        switch (menuItem.getItemId()) {
+            case R.id.nav_overview_fragment:
+                fragmentClass = DeviceListFragment.class;
+                break;
+            case R.id.nav_remote_fragment:
+                fragmentClass = RemoteControlFragment.class;
+                break;
+            case R.id.nav_logout:
+                showLogoutDialog();
+                return;
+            default:
+                fragmentClass = DeviceListFragment.class;
         }
 
-        String title = getResources().getString(R.string.dialog_please_wait);
-        String message = getResources().getString(R.string.dialog_try_to_connect);
-        final ProgressDialog progressDialog = ProgressDialog.show(this, title, message, true, false);
+        try {
+            activeFragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        webSocket = new WebSocket(this, new WebSocketEvents() {
-            @Override
-            public void onMessage(Remote remote) {
-                if (remote instanceof RemoteResponse) {
-                    RemoteResponse rr = (RemoteResponse) remote;
-                    if (rr.getStatus() == 100) {
-                        ConnectionRepo repo = new ConnectionRepo(MainActivity.this);
-                        repo.insertConnection(new Connection(rr.getMessage(), webSocket.getUrl()));
-                    }
-                }
-            }
+        // Insert the fragment by replacing any existing fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.mainFrameLayout, activeFragment).commit();
 
-            @Override
-            public void onOpened() {
-                fab1.setImageResource(R.drawable.disconnect);
-                animateFAB();
-                progressDialog.cancel();
-                progressDialog.dismiss();
-                seekBar.setEnabled(true);
-            }
-
-            @Override
-            public void onClosed() {
-                fab1.setImageResource(R.drawable.camera);
-                seekBar.setEnabled(false);
-            }
-
-            @Override
-            public void onError(String error) {
-                View view = findViewById(R.id.rootLayout);
-                assert view != null;
-                Snackbar.make(view, error, Snackbar.LENGTH_LONG).show();
-                progressDialog.cancel();
-                progressDialog.dismiss();
-            }
-        }, url);
+        // Highlight the selected item has been done by NavigationView
+        menuItem.setChecked(true);
+        // Set action bar title
+        setTitle(menuItem.getTitle());
+        // Close the navigation drawer
+        drawer.closeDrawers();
     }
 
     @Override
-    protected void onDestroy() {
-        if (webSocket != null){
-            webSocket.closeConnection();
+    public void onBackPressed() {
+
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+            return;
         }
-        super.onDestroy();
+        showLogoutDialog();
+    }
+
+    private void showLogoutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_logout_title);
+        builder.setMessage(R.string.dialog_logout_message);
+        builder.setPositiveButton(R.string.dialog_logout_positiv, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                Utility.logout(MainActivity.this);
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
     }
 
     @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.fab:
-
-                animateFAB();
-                break;
-            case R.id.fabCamera:
-
-                if (webSocket == null || !webSocket.isConnected()) {
-                    onCameraClick();
-                } else {
-                    onCancelClick();
-                }
-                break;
-            case R.id.fabList:
-
-                showConnectionList();
-                break;
-        }
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
-    private void showConnectionList() {
-        new ChooseConnectionDialog(this, new ChooseDialogEvents<Connection>() {
-            @Override
-            public void OnChoose(Connection connection) {
-                openWebSocketConnection(connection.getUrl());
-            }
-
-            @Override
-            public void OnEmptyChooseList() {
-                View view = findViewById(R.id.rootLayout);
-                assert view != null;
-                Snackbar.make(view, R.string.chooser_empty, Snackbar.LENGTH_LONG).show();
-            }
-        }).ShowDialog();
-    }
-
-    public void animateFAB() {
-
-        if (isFabOpen) {
-
-            fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            isFabOpen = false;
-
-        } else {
-
-            fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            isFabOpen = true;
-
-        }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 }

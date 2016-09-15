@@ -1,5 +1,6 @@
 package de.theonlymarv.computermonitor;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.theonlymarv.computermonitor.Remote.WebServer.Device;
@@ -30,6 +31,7 @@ public class RuntimeHolder {
 
     public void setDeviceList(List<Device> deviceList) {
         this.deviceList = deviceList;
+        Collections.sort(this.deviceList);
     }
 
     public List<Usage> getUsagesList() {
@@ -38,5 +40,6 @@ public class RuntimeHolder {
 
     public void setUsagesList(List<Usage> usagesList) {
         this.usagesList = usagesList;
+        Collections.sort(this.usagesList);
     }
 }

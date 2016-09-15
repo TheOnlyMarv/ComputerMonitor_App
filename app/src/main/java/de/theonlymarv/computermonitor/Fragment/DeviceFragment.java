@@ -69,7 +69,7 @@ public class DeviceFragment extends Fragment {
         if (RuntimeHolder.getInstance().getUsagesList() != null) {
             List<Usage> usageList = Utility.getUsageWithId(deviceId, RuntimeHolder.getInstance().getUsagesList());
             if (usageList.size() != 0) {
-                assignUsageList(usageList);
+                assignUsageList();
                 setProgressBarVisibility(false);
             } else {
                 startLoadingUsageData();
@@ -116,8 +116,15 @@ public class DeviceFragment extends Fragment {
         serverConnection.execute(request);
     }
 
+    private void assignUsageList() {
+        assignUsageList(null);
+    }
+
     @SuppressLint("SimpleDateFormat")
-    private void assignUsageList(List<Usage> usageList) {
+    private void assignUsageList(@Nullable List<Usage> usageList) {
+        if (usageList == null) {
+            usageList = Utility.getUsageWithId(deviceId, RuntimeHolder.getInstance().getUsagesList());
+        }
 
         if (usageList.size() == 0) {
             showEmptiness(true);
@@ -125,9 +132,11 @@ public class DeviceFragment extends Fragment {
         } else {
             showEmptiness(false);
         }
+        //Collections.sort(usageList);
 
         int anzEntries = usageList.size() >= 5 ? 5 : usageList.size();
         int startIndex = usageList.size() - anzEntries;
+
 
         ArrayList<BarEntry> downloadValues = new ArrayList<BarEntry>();
         ArrayList<BarEntry> uploadValues = new ArrayList<BarEntry>();

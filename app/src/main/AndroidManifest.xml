@@ -24,12 +24,6 @@
 
         <activity
             android:name=".Activity.MainActivity"
-            android:screenOrientation="userPortrait">
-
-        </activity>
-
-        <activity
-            android:name=".Activity.NewMainActivity"
             android:screenOrientation="userPortrait"
             android:theme="@style/AppThemeWithoutActionbar" />
 

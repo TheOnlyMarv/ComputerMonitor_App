@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Marvin on 23.08.2016.
  */
-public class Usage {
+public class Usage implements Comparable<Usage> {
     private int device_id;
     private float upload, download;
     private Date date;
@@ -40,5 +40,10 @@ public class Usage {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    @Override
+    public int compareTo(Usage another) {
+        return getDate().compareTo(another.getDate());
     }
 }

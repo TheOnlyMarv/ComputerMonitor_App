@@ -43,7 +43,7 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        layoutView = inflater.inflate(R.layout.activity_main, container, false);
+        layoutView = inflater.inflate(R.layout.fragment_remote_control, container, false);
 
         fab = (FloatingActionButton) layoutView.findViewById(R.id.fab);
         fab1 = (FloatingActionButton) layoutView.findViewById(R.id.fabCamera);

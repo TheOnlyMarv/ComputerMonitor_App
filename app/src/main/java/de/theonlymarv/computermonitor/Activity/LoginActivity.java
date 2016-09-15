@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void successfulLoggedIn(String token) {
         Utility.saveToPrefs(this, Utility.PREFS_TOKEN_KEY, token);
-        startActivity(new Intent(this, NewMainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 

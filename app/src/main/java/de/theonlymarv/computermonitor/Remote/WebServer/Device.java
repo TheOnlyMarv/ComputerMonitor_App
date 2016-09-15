@@ -1,11 +1,13 @@
 package de.theonlymarv.computermonitor.Remote.WebServer;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
  * Created by Marvin on 23.08.2016.
  */
-public class Device {
+public class Device implements Comparable<Device> {
     private int id;
     private String name;
     private Date last_used;
@@ -41,5 +43,10 @@ public class Device {
                 ", name='" + name + '\'' +
                 ", last_used=" + last_used +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NonNull Device another) {
+        return getId() - another.getId();
     }
 }
