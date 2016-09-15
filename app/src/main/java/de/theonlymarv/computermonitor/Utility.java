@@ -58,6 +58,8 @@ public class Utility {
 
     public static void logout(Activity context) {
         Utility.resetSessionSettings(context);
+        RuntimeHolder.getInstance().setUsagesList(null);
+        RuntimeHolder.getInstance().setDeviceList(null);
         Intent intent = new Intent(context, LoginActivity.class);
         context.startActivity(intent);
         context.finish();

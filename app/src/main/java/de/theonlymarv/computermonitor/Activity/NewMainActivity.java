@@ -1,6 +1,7 @@
 package de.theonlymarv.computermonitor.Activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,10 +14,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import de.theonlymarv.computermonitor.Fragment.DeviceListFragment;
+import de.theonlymarv.computermonitor.Fragment.RemoteControlFragment;
+import de.theonlymarv.computermonitor.Interfaces.PreRemoteEvents;
 import de.theonlymarv.computermonitor.R;
 import de.theonlymarv.computermonitor.Utility;
 
@@ -30,6 +37,8 @@ public class NewMainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView nvDrawer;
     private ActionBarDrawerToggle drawerToggle;
+
+    private Fragment activeFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,16 +87,36 @@ public class NewMainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() != null && activeFragment instanceof PreRemoteEvents) {
+                ((PreRemoteEvents) activeFragment).OnQrCodeScanned(result.getContents());
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        boolean successful = false;
+        if (activeFragment instanceof PreRemoteEvents) {
+            successful = ((PreRemoteEvents) activeFragment).OnDownUpPressed(event);
+        }
+        return successful || super.dispatchKeyEvent(event);
+    }
+
     public void selectDrawerItem(MenuItem menuItem) {
         // Create a new fragment and specify the fragment to show based on nav item clicked
-        Fragment fragment = null;
+        activeFragment = null;
         Class fragmentClass;
         switch (menuItem.getItemId()) {
             case R.id.nav_overview_fragment:
                 fragmentClass = DeviceListFragment.class;
                 break;
             case R.id.nav_remote_fragment:
-                fragmentClass = DeviceListFragment.class;
+                fragmentClass = RemoteControlFragment.class;
                 break;
             case R.id.nav_logout:
                 showLogoutDialog();
@@ -97,14 +126,14 @@ public class NewMainActivity extends AppCompatActivity {
         }
 
         try {
-            fragment = (Fragment) fragmentClass.newInstance();
+            activeFragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.mainFrameLayout, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.mainFrameLayout, activeFragment).commit();
 
         // Highlight the selected item has been done by NavigationView
         menuItem.setChecked(true);
