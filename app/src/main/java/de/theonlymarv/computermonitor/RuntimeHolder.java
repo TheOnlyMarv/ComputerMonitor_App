@@ -31,7 +31,9 @@ public class RuntimeHolder {
 
     public void setDeviceList(List<Device> deviceList) {
         this.deviceList = deviceList;
-        Collections.sort(this.deviceList);
+        if (this.deviceList != null){
+            Collections.sort(this.deviceList);
+        }
     }
 
     public List<Usage> getUsagesList() {
@@ -40,6 +42,9 @@ public class RuntimeHolder {
 
     public void setUsagesList(List<Usage> usagesList) {
         this.usagesList = usagesList;
-        Collections.sort(this.usagesList);
+        if (this.usagesList != null)
+        {
+            Collections.sort(this.usagesList);
+        }
     }
 }
