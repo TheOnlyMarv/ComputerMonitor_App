@@ -17,7 +17,7 @@
     <string name="activitiy_login">Login</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="card_last_used">Last used:</string>
     <string name="access_denied">Session timed out</string>
     <string name="dialog_logout_title">Logout</string>
@@ -31,6 +31,6 @@
     <string name="menu_overview">Overview</string>
     <string name="menu_remote">Remote connection</string>
     <string name="menu_logout">Logout</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="drawer_close" translatable="false">Close navigation drawer</string>
 </resources>
