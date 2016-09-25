@@ -28,4 +28,8 @@
     <string name="menu_overview">Übersicht</string>
     <string name="menu_remote">Remote Verbindung</string>
     <string name="menu_logout">Abmelden</string>
+    <string name="menu_delete_remote_history">Lösche den Remoteverlauf</string>
+    <string name="dialog_delete_history_title">Verlauf löschen</string>
+    <string name="dialog_delelte_history_message">Wollen Sue wirklich die Liste der Remoteverbindungen löschen?</string>
+    <string name="dialog_delete_history_positiv">Löschen</string>
 </resources>

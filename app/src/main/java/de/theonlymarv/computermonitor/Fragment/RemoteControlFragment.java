@@ -1,13 +1,18 @@
 package de.theonlymarv.computermonitor.Fragment;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -26,12 +31,14 @@ import de.theonlymarv.computermonitor.R;
 import de.theonlymarv.computermonitor.Remote.WebSocket.Action;
 import de.theonlymarv.computermonitor.Remote.WebSocket.Remote;
 import de.theonlymarv.computermonitor.Remote.WebSocket.RemoteResponse;
+import de.theonlymarv.computermonitor.Utility;
 import de.theonlymarv.computermonitor.WebSocket;
 
 /**
  * Created by Marvin on 15.09.2016 for ComputerMonitor.
  */
 public class RemoteControlFragment extends Fragment implements View.OnClickListener, PreRemoteEvents {
+    private static final String TAG = RemoteControlFragment.class.getSimpleName();
     private View layoutView;
 
     private WebSocket webSocket;
@@ -44,6 +51,8 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         layoutView = inflater.inflate(R.layout.fragment_remote_control, container, false);
+
+        setHasOptionsMenu(true);
 
         fab = (FloatingActionButton) layoutView.findViewById(R.id.fab);
         fab1 = (FloatingActionButton) layoutView.findViewById(R.id.fabCamera);
@@ -122,9 +131,7 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
 
             @Override
             public void OnEmptyChooseList() {
-                View view = layoutView.findViewById(R.id.rootLayout);
-                assert view != null;
-                Snackbar.make(view, R.string.chooser_empty, Snackbar.LENGTH_LONG).show();
+                Utility.ShowSnackBarOnMainActivity(getActivity(), R.string.chooser_empty, Snackbar.LENGTH_LONG);
             }
         }).ShowDialog();
     }
@@ -167,9 +174,7 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
 
             @Override
             public void onError(String error) {
-                View view = layoutView.findViewById(R.id.rootLayout);
-                assert view != null;
-                Snackbar.make(view, error, Snackbar.LENGTH_LONG).show();
+                Utility.ShowSnackBarOnMainActivity(getActivity(), error, Snackbar.LENGTH_LONG);
                 progressDialog.cancel();
                 progressDialog.dismiss();
             }
@@ -242,5 +247,35 @@ public class RemoteControlFragment extends Fragment implements View.OnClickListe
             default:
                 return false;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                deleteRemoteHistory();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteRemoteHistory() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.dialog_delete_history_title);
+        builder.setMessage(R.string.dialog_delelte_history_message);
+        builder.setPositiveButton(R.string.dialog_delete_history_positiv, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ConnectionRepo repo = new ConnectionRepo(getContext());
+                repo.deleteAllConnections();
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, null);
+
+        builder.create().show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_remote, menu);
     }
 }

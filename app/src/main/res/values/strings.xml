@@ -33,4 +33,8 @@
     <string name="menu_logout">Logout</string>
     <string name="drawer_open" translatable="false">Open navigation drawer</string>
     <string name="drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="menu_delete_remote_history">Delete remote history</string>
+    <string name="dialog_delete_history_title">Delete history</string>
+    <string name="dialog_delelte_history_message">Are you sure to delete the history of remote connections?</string>
+    <string name="dialog_delete_history_positiv">Delete</string>
 </resources>

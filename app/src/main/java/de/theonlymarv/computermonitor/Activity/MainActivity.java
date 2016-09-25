@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().popBackStack();
             return;
         }
-        showLogoutDialog();
+        System.exit(0);
     }
 
     private void showLogoutDialog() {
