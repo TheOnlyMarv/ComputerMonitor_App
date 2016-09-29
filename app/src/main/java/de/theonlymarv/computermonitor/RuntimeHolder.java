@@ -1,10 +1,11 @@
 package de.theonlymarv.computermonitor;
 
+import android.support.annotation.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
 import de.theonlymarv.computermonitor.Remote.WebServer.Device;
-import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
 
 /**
  * Created by Marvin on 13.09.2016 for ComputerMonitor.
@@ -13,7 +14,6 @@ public class RuntimeHolder {
     private static RuntimeHolder runtimeHolder;
 
     private List<Device> deviceList;
-    private List<Usage> usagesList;
 
     private RuntimeHolder() {
     }
@@ -36,15 +36,13 @@ public class RuntimeHolder {
         }
     }
 
-    public List<Usage> getUsagesList() {
-        return usagesList;
-    }
-
-    public void setUsagesList(List<Usage> usagesList) {
-        this.usagesList = usagesList;
-        if (this.usagesList != null)
-        {
-            Collections.sort(this.usagesList);
+    @Nullable
+    public Device getDeviceById(int id) {
+        for (Device device : deviceList) {
+            if (device.getId() == id) {
+                return device;
+            }
         }
+        return null;
     }
 }

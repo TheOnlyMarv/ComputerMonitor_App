@@ -60,7 +60,6 @@ public class Utility {
 
     public static void logout(Activity activity) {
         Utility.resetSessionSettings(activity);
-        RuntimeHolder.getInstance().setUsagesList(null);
         RuntimeHolder.getInstance().setDeviceList(null);
         Intent intent = new Intent(activity, LoginActivity.class);
         activity.startActivity(intent);
@@ -71,7 +70,7 @@ public class Utility {
     public static List<Usage> getUsageWithId(int id, @NonNull List<Usage> usageList) {
         List<Usage> filteredList = new ArrayList<>();
         for (Usage usage : usageList) {
-            if (usage.getDevice_id() == id) {
+            if (usage != null && usage.getDevice_id() == id) {
                 filteredList.add(usage);
             }
         }

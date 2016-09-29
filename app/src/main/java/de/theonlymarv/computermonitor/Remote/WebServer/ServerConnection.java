@@ -66,6 +66,8 @@ public class ServerConnection extends AsyncTask<Request, Void, Object> {
                 case REGISTER:
                 case ADD_DEVICE:
                 case ADD_USAGE:
+                case DELETE_DEVICE:
+                case DELETE_USER:
                     try {
                         return getStatus(json, genson);
                     } catch (JsonBindingException jbe) {

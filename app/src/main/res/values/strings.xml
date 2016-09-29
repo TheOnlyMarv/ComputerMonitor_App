@@ -37,4 +37,9 @@
     <string name="dialog_delete_history_title">Delete history</string>
     <string name="dialog_delelte_history_message">Are you sure to delete the history of remote connections?</string>
     <string name="dialog_delete_history_positiv">Delete</string>
+    <string name="delete_device_successful">Device successfully deleted</string>
+    <string name="delete_dialog_title">Delete</string>
+    <string name="delete_device_dialog_message">Are you sure to delte this device? It can\'t be undo!</string>
+    <string name="delete_dialog_positiv">Delete</string>
+    <string name="no_device">No device on this account</string>
 </resources>

@@ -2,7 +2,10 @@ package de.theonlymarv.computermonitor.Remote.WebServer;
 
 import android.support.annotation.NonNull;
 
+import com.owlike.genson.annotation.JsonIgnore;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Marvin on 23.08.2016.
@@ -11,6 +14,18 @@ public class Device implements Comparable<Device> {
     private int id;
     private String name;
     private Date last_used;
+
+    private List<Usage> usageList;
+
+    @JsonIgnore
+    public List<Usage> getUsageList() {
+        return usageList;
+    }
+
+    @JsonIgnore
+    public void setUsageList(List<Usage> usageList) {
+        this.usageList = usageList;
+    }
 
     public int getId() {
         return id;

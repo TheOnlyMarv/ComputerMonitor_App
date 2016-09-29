@@ -25,12 +25,10 @@ import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
  */
 public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.DeviceViewHolder> {
     private List<Device> devices;
-    private List<Usage> lastUsages;
     private OnItemClickListener onItemClickListener;
 
-    public DeviceListAdapter(List<Device> devices, List<Usage> lastUsages, OnItemClickListener onItemClickListener) {
+    public DeviceListAdapter(List<Device> devices, OnItemClickListener onItemClickListener) {
         this.devices = devices;
-        this.lastUsages = lastUsages;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -42,11 +40,18 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     @Override
     public void onBindViewHolder(final DeviceViewHolder holder, int position) {
-        holder.assignData(devices.get(position), lastUsages.get(position));
+        holder.assignData(devices.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onItemClickListener.onItemClick(devices.get(holder.getAdapterPosition()));
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onItemClickListener.onLongItemClick(devices.get(holder.getAdapterPosition()));
+                return true;
             }
         });
     }
@@ -68,7 +73,9 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
             tvEmpty = (TextView) itemView.findViewById(R.id.tvEmpty);
         }
 
-        public void assignData(Device device, Usage usage) {
+        public void assignData(Device device) {
+            Usage usage = device.getUsageList() == null || device.getUsageList().size() == 0 ? null : device.getUsageList().get(device.getUsageList().size() - 1);
+
             tvDeviceName.setText(device.getName());
             tvLastUsage.setText(device.getLast_used() == null ? " - " : new SimpleDateFormat("dd.MM.yyyy").format(device.getLast_used()));
 
@@ -103,5 +110,7 @@ public class DeviceListAdapter extends RecyclerView.Adapter<DeviceListAdapter.De
 
     public interface OnItemClickListener {
         void onItemClick(Device device);
+
+        void onLongItemClick(Device device);
     }
 }

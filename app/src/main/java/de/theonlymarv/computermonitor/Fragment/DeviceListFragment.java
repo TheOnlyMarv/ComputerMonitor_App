@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     private static final String TAG = DeviceListFragment.class.getSimpleName();
     private View view;
     private RecyclerView recyclerView;
+    private TextView emptyTextView;
     private ProgressBar progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RuntimeHolder runtimeHolder;
@@ -54,10 +56,11 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        emptyTextView = (TextView) view.findViewById(R.id.emptyTextView);
 
         runtimeHolder = RuntimeHolder.getInstance();
 
-        if (runtimeHolder.getDeviceList() != null && runtimeHolder.getUsagesList() != null) {
+        if (runtimeHolder.getDeviceList() != null) {
             downloadFinish(runtimeHolder.getDeviceList().size());
         } else {
             downloadDevices(Utility.getFromPrefs(getContext(), Utility.PREFS_TOKEN_KEY, ""));
@@ -78,7 +81,6 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     private void downloadDevices(final String token) {
 
         runtimeHolder.setDeviceList(new ArrayList<Device>());
-        runtimeHolder.setUsagesList(new ArrayList<Usage>());
         finishingCounter = 0;
 
         Request request = new Request(Request.Action.LOAD_DEVICE, Request.getLoadDevicesUrl(token));
@@ -86,12 +88,16 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
             @Override
             public void OnSuccessful(Object object) {
                 if (object instanceof List<?>) {
-                    runtimeHolder.getDeviceList().addAll((List<Device>) object);
-                    for (Device device : runtimeHolder.getDeviceList()) {
-                        downloadUsage(token, device);
-                    }
-                    if (runtimeHolder.getDeviceList().size() == 0) {
-                        showProgressbar(false);
+                    if (((List<Device>) object).size() != 0) {
+                        runtimeHolder.getDeviceList().addAll((List<Device>) object);
+                        for (Device device : runtimeHolder.getDeviceList()) {
+                            downloadUsage(token, device);
+                        }
+                        if (runtimeHolder.getDeviceList().size() == 0) {
+                            showProgressbar(false);
+                        }
+                    } else {
+                        downloadFinish(finishingCounter);
                     }
                 } else if (object instanceof Status) {
                     showProgressbar(false);
@@ -123,18 +129,14 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         builder.create().show();
     }
 
-    private void downloadUsage(String token, Device device) {
+    private void downloadUsage(String token, final Device device) {
         Request request = new Request(Request.Action.LOAD_USAGE, Request.getLoadUsageUrl(token, device.getId()));
         ServerConnection serverConnection = new ServerConnection(new OnNetworkAccess() {
             @Override
             public void OnSuccessful(@NonNull Object object) {
                 if (object instanceof List<?>) {
                     List<Usage> usages = (List<Usage>) object;
-                    if (usages.size() > 0) {
-                        runtimeHolder.getUsagesList().addAll(usages);
-                    } else {
-                        runtimeHolder.getUsagesList().add(null);
-                    }
+                    device.setUsageList(usages);
                     downloadFinish(++finishingCounter);
                 }
             }
@@ -151,14 +153,16 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
     private void downloadFinish(int i) {
         if (i == runtimeHolder.getDeviceList().size()) {
             showProgressbar(false);
-            List<Usage> usageList = new ArrayList<>();
-            for (Device device : runtimeHolder.getDeviceList()) {
-                List<Usage> usages = Utility.getUsageWithId(device.getId(), runtimeHolder.getUsagesList());
-                usageList.add(usages.get(usages.size() - 1));
-            }
-            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(runtimeHolder.getDeviceList(), usageList, this);
+
+            DeviceListAdapter deviceListAdapter = new DeviceListAdapter(runtimeHolder.getDeviceList(), this);
             recyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(), 1));
             recyclerView.setAdapter(deviceListAdapter);
+
+            if (runtimeHolder.getDeviceList().size() == 0) {
+                emptyTextView.setVisibility(View.VISIBLE);
+            } else {
+                emptyTextView.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -177,6 +181,42 @@ public class DeviceListFragment extends Fragment implements DeviceListAdapter.On
         deviceFragment.setArguments(bundle);
         getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                 .replace(R.id.mainFrameLayout, deviceFragment).addToBackStack("DevFrag").commit();
+    }
+
+    @Override
+    public void onLongItemClick(final Device device) {
+        Log.i(TAG, "onItemLongClick: " + device.toString());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.delete_dialog_title);
+        builder.setMessage(R.string.delete_device_dialog_message);
+        builder.setPositiveButton(R.string.delete_dialog_positiv, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new ServerConnection(new OnNetworkAccess() {
+                    @Override
+                    public void OnSuccessful(@NonNull Object object) {
+                        if (object instanceof Status) {
+                            Status status = (Status) object;
+                            if (status.isStatus()) {
+                                showProgressbar(true);
+                                downloadDevices(Utility.getFromPrefs(getContext(), Utility.PREFS_TOKEN_KEY, ""));
+                                Utility.ShowSnackBarOnMainActivity(getActivity(), R.string.delete_device_successful, Snackbar.LENGTH_LONG);
+                            } else {
+                                Utility.ShowSnackBarOnMainActivity(getActivity(), status.getMessage(), Snackbar.LENGTH_LONG);
+                            }
+                            Log.i(TAG, "deleteClick: " + device.getName() + " deleted");
+                        }
+                    }
+
+                    @Override
+                    public void OnError(Exception e) {
+                        Utility.ShowSnackBarOnMainActivity(getActivity(), "Unkown Error", Snackbar.LENGTH_LONG);
+                    }
+                }).execute(new Request(Request.Action.DELETE_DEVICE, Request.getDeleteDeviceUrl(Utility.getFromPrefs(getContext(), Utility.PREFS_TOKEN_KEY, ""), device.getId())));
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, null);
+        builder.create().show();
     }
 
     private void showSnackBar(@StringRes int textRes, @Snackbar.Duration int duration) {

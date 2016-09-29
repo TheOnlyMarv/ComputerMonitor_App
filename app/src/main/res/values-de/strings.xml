@@ -32,4 +32,9 @@
     <string name="dialog_delete_history_title">Verlauf löschen</string>
     <string name="dialog_delelte_history_message">Wollen Sue wirklich die Liste der Remoteverbindungen löschen?</string>
     <string name="dialog_delete_history_positiv">Löschen</string>
+    <string name="delete_device_successful">Gerät erfolgreich gelöscht</string>
+    <string name="delete_dialog_title">Löschen</string>
+    <string name="delete_dialog_positiv">Löschen</string>
+    <string name="delete_device_dialog_message">Sind Sie sich sicher dieses Gerät zu löschen? Dies kann nicht Rückgängig gemacht werden!</string>
+    <string name="no_device">Kein Gerät auf diesem Account</string>
 </resources>

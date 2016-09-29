@@ -53,12 +53,22 @@ public class Request {
         return baseUrl + String.format("usagedatalist.php?token=%s&deviceid=%s", token, String.valueOf(deviceId));
     }
 
+    public static String getDeleteUserUrl(String token, String password) {
+        return baseUrl + String.format("userdelete.php?token=%s&password=%s", token, password);
+    }
+
+    public static String getDeleteDeviceUrl(String token, int deviceId) {
+        return baseUrl + String.format("devicedelete.php?token=%s&deviceid=%s", token, String.valueOf(deviceId));
+    }
+
     public enum Action {
         LOGIN,
         REGISTER,
         LOAD_DEVICE,
         ADD_DEVICE,
         ADD_USAGE,
-        LOAD_USAGE
+        LOAD_USAGE,
+        DELETE_USER,
+        DELETE_DEVICE
     }
 }

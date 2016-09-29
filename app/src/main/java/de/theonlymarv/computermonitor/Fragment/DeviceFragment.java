@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -27,6 +28,7 @@ import java.util.List;
 
 import de.theonlymarv.computermonitor.Interfaces.OnNetworkAccess;
 import de.theonlymarv.computermonitor.R;
+import de.theonlymarv.computermonitor.Remote.WebServer.Device;
 import de.theonlymarv.computermonitor.Remote.WebServer.Request;
 import de.theonlymarv.computermonitor.Remote.WebServer.ServerConnection;
 import de.theonlymarv.computermonitor.Remote.WebServer.Usage;
@@ -66,16 +68,22 @@ public class DeviceFragment extends Fragment {
             }
         });
 
-        if (RuntimeHolder.getInstance().getUsagesList() != null) {
-            List<Usage> usageList = Utility.getUsageWithId(deviceId, RuntimeHolder.getInstance().getUsagesList());
-            if (usageList.size() != 0) {
-                assignUsageList();
-                setProgressBarVisibility(false);
+
+        Device device = RuntimeHolder.getInstance().getDeviceById(deviceId);
+        if (device != null) {
+            List<Usage> usageList = device.getUsageList();
+            if (usageList != null) {
+                if (usageList.size() != 0) {
+                    assignUsageList();
+                    setProgressBarVisibility(false);
+                } else {
+                    startLoadingUsageData();
+                }
             } else {
                 startLoadingUsageData();
             }
         } else {
-            startLoadingUsageData();
+            Utility.ShowSnackBarOnMainActivity(getActivity(), R.string.unkown_error, Snackbar.LENGTH_LONG);
         }
 
         return this.view;
@@ -123,7 +131,7 @@ public class DeviceFragment extends Fragment {
     @SuppressLint("SimpleDateFormat")
     private void assignUsageList(@Nullable List<Usage> usageList) {
         if (usageList == null) {
-            usageList = Utility.getUsageWithId(deviceId, RuntimeHolder.getInstance().getUsagesList());
+            usageList = RuntimeHolder.getInstance().getDeviceById(deviceId).getUsageList();
         }
 
         if (usageList.size() == 0) {
