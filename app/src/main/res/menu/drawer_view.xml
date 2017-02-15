@@ -11,6 +11,11 @@
             android:icon="@drawable/desktop_black"
             android:title="@string/menu_remote" />
         <item
+            android:id="@+id/nav_policy"
+            android:icon="@drawable/policy"
+            android:title="@string/menu_policy"
+            android:checkable="false"/>
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/power_black"
             android:title="@string/menu_logout"

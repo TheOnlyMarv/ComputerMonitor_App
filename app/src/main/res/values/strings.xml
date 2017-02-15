@@ -42,4 +42,5 @@
     <string name="delete_device_dialog_message">Are you sure to delte this device? It can\'t be undo!</string>
     <string name="delete_dialog_positiv">Delete</string>
     <string name="no_device">No device on this account</string>
+    <string name="menu_policy">Privacy policy</string>
 </resources>

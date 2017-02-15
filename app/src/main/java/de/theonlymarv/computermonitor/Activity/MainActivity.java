@@ -3,6 +3,7 @@ package de.theonlymarv.computermonitor.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -119,8 +120,13 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = RemoteControlFragment.class;
                 break;
             case R.id.nav_logout:
-                showLogoutDialog();
-                return;
+            showLogoutDialog();
+            return;
+            case R.id.nav_policy:
+                String url = "https://theonlymarv.de/cm/policy.html";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             default:
                 fragmentClass = DeviceListFragment.class;
         }

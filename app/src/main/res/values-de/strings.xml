@@ -37,4 +37,5 @@
     <string name="delete_dialog_positiv">Löschen</string>
     <string name="delete_device_dialog_message">Sind Sie sich sicher dieses Gerät zu löschen? Dies kann nicht Rückgängig gemacht werden!</string>
     <string name="no_device">Kein Gerät auf diesem Account</string>
+    <string name="menu_policy">Datenschutzerklärung</string>
 </resources>

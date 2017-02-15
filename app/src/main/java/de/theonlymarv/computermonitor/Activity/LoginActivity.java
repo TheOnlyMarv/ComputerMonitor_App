@@ -107,6 +107,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     showSnackBar(R.string.unkown_error, Snackbar.LENGTH_LONG);
                 }
+                setEnableControls(true);
             }
         });
         setEnableControls(false);
@@ -147,6 +148,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     showSnackBar(R.string.unkown_error, Snackbar.LENGTH_LONG);
                 }
+                setEnableControls(true);
             }
         });
         setEnableControls(false);

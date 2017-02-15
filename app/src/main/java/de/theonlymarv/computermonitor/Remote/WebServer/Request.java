@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by Marvin on 23.08.2016.
  */
 public class Request {
-    private static String baseUrl = "https://theonlymarv.de/cm/";
+    private static String baseUrl = "https://theonlymarv.de/cm/api/";
 
     private Action action;
     private String requestUrl;
